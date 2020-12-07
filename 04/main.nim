@@ -11,14 +11,14 @@ let REX_STRCOLOR = re"(amb|blu|brn|gry|grn|hzl|oth)"
 let REX_PID = re"\d{9}"
 let REX_YEAR = re"(\d{4})"
 
-proc isValidYear(str:string, lower, upper:int):bool =
+proc isValidYear(str: string, lower, upper: int): bool =
     let match = find(str, REX_YEAR)
     if isNone match:
         return false
     let year = match.get().captures[0].parseInt()
     return year >= lower and year <= upper
 
-proc isFieldValid(fieldName, fieldVal:string):bool =
+proc isFieldValid(fieldName, fieldVal: string): bool =
     case fieldName:
     of "byr":
         return isValidYear(fieldVal, 1920, 2002)
@@ -47,7 +47,6 @@ proc isFieldValid(fieldName, fieldVal:string):bool =
             return false
         return fieldVal.contains(REX_PID)
 
-
 proc main() =
     let inputFile = readFile("input.txt")
     let passports = inputFile.split("\n\n")
@@ -59,7 +58,7 @@ proc main() =
         for finding in findIter(passportFields, REX_FIELD):
             if isFieldValid(finding.captures[0], finding.captures[1].strip()):
                 fieldsPresent.add(finding.captures[0])
-        
+
         let fieldsPresent2 = toHashSet(fieldsPresent)
         let fieldsMissing = REQUIRED_FIELDS - fieldsPresent2
 
